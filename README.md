@@ -13,5 +13,5 @@ Install dependencies
 `scrapy crawl races_spider -o results.json`
 
 The first race ever recorded in runedia is from November 1993.
-result.json will contain all the races from the November 1993 until
-the actual year.
+result.json will contain all the mountain races from the November 1993 of until
+the actual year, celebrated in Spain.
