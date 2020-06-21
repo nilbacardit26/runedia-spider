@@ -27,7 +27,7 @@ class RunediaSpider(scrapy.Spider):
 
     def parse(self, response):
         curses = response.css("div.item-cursa")
-        year = response.request.url.split("/")[10].split("-")[0]
+        # year = response.request.url.split("/")[10].split("-")[0]
         for cursa in curses:
             print(cursa.css("span::text").getall())
             # Parse the distance
@@ -52,7 +52,6 @@ class RunediaSpider(scrapy.Spider):
             yield {
                 "day": cursa.css("span.dia::text").get(),
                 "month": cursa.css("span.mes::text").get(),
-                "year": year,
                 "province": location.split(delimiter)[0],
                 "town": location.split(delimiter)[1],
                 "title": cursa.css("a::attr(title)").get(),
