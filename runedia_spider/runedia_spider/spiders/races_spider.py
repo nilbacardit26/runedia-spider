@@ -5,15 +5,20 @@ import arrow
 class RunediaSpider(scrapy.Spider):
     name = "races_spider"
 
-    def get_urls(self, first_year=2019, last_year=None):
+    def get_urls(self, first_year=1993, last_year=None):
         actual_year = last_year
         if not last_year:
             actual_year = arrow.utcnow().year
         base_url = "https://runedia.mundodeportivo.com/en/races-calendar/spain/comunidad/provincia/mountain-races/distancia/{year}-{month}/0/0/"
         urls_list = []
         for year in range(first_year, actual_year + 1):
-            for month in range(1, 13):
-                urls_list.append(base_url.format(year=year, month=month))
+            # First race ever in runedia in 1993 November
+            if year == 1993:
+                for month in range(11, 13):
+                    urls_list.append(base_url.format(year=year, month=month))
+            else:
+                for month in range(1, 13):
+                    urls_list.append(base_url.format(year=year, month=month))
         return urls_list
 
     def start_requests(self):
@@ -47,10 +52,11 @@ class RunediaSpider(scrapy.Spider):
             yield {
                 "day": cursa.css("span.dia::text").get(),
                 "month": cursa.css("span.mes::text").get(),
+                "year": year,
                 "province": location.split(delimiter)[0],
                 "town": location.split(delimiter)[1],
                 "title": cursa.css("a::attr(title)").get(),
                 "distance": distance,
                 "status": cursa.css("img.icono::attr(title)").get(),
-                "year": year
+                "link": cursa.css("a::attr(href)").get()
             }
